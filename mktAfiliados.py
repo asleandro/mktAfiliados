@@ -3,7 +3,7 @@ from telegram.ext import Application, CommandHandler, ContextTypes
 import schedule, time, os, asyncio
 
 TOKEN = os.getenv("TOKEN_AFILIADOS")
-CANAL_ID = "@seu_canal"
+CANAL_ID = "@intelitechofertas"
 
 if not TOKEN:
     raise ValueError("TOKEN não encontrado ou inválido.")
