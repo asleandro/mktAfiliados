@@ -21,9 +21,6 @@ def main():
 
     app.add_handler(CommandHandler("start", start))
 
-    loop = asyncio.get_running_loop()
-    app.run_polling()
-
 if __name__ == '__main__':
     main()
 
