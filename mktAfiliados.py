@@ -21,5 +21,7 @@ def main():
 
     app.add_handler(CommandHandler("start", start))
 
+    app.__run()
+
 if __name__ == '__main__':
     main()
