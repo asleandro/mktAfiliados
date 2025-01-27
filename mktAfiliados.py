@@ -1,6 +1,9 @@
 from telegram import Update, Bot
-from telegram.ext import Application, CommandHandler, ContextTypes
-import schedule, time, os, asyncio
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+import schedule, os, asyncio, logging
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(messages)s',
+                    level = logging.INFO)
 
 TOKEN = os.getenv("TOKEN_INTELITECH")
 CANAL_ID = "@intelitechofertas"
@@ -8,7 +11,7 @@ CANAL_ID = "@intelitechofertas"
 if not TOKEN:
     raise ValueError("TOKEN não encontrado ou inválido.")
 
-app = Application.builder().token(TOKEN).build()
+app = ApplicationBuilder().token(TOKEN).build()
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Olá! Digite /promo para ver as melhores ofertas!")
@@ -44,8 +47,7 @@ async def scheduler():
         await asyncio.sleep(60)
 
 async def main():
-    asyncio.create_task(scheduler())
-    await app.run_polling()
+   app.run_polling()
    
 if __name__ == '__main__':
     asyncio.run(main())
