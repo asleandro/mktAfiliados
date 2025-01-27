@@ -44,16 +44,10 @@ async def scheduler():
         await asyncio.sleep(60)
 
 async def main():
-    loop = asyncio.get_running_loop()
-    loop.create_task(scheduler())
-    await app.run_polling()
+    scheduler_task = asyncio.create_task(scheduler())
+    app_task = asyncio.create_task(app.run_polling())
+    await asyncio.gather(scheduler_task, app_task)
 
 if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    
-    try:
-        loop.run_until_complete(main())
-        loop.run_forever()
-    except KeyboardInterrupt:
-        print("Bot interrompido")
+    asyncio.run(main())
     
