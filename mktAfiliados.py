@@ -3,18 +3,17 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 import schedule, os, asyncio, logging
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level = logging.INFO)
+                    level=logging.INFO)
 
 TOKEN = os.getenv("TOKEN_INTELITECH")
 CANAL_ID = "@intelitechofertas"
 
 if not TOKEN:
     raise ValueError("TOKEN não encontrado ou inválido.")
-    
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Olá! Digite /promo para ver as melhores ofertas!")
-    
+
 async def promo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     mensagem = """
     🔥 *Oferta Especial!* 🔥
@@ -48,11 +47,12 @@ async def main():
     app.add_handler(CommandHandler("promo", promo))
     app.add_handler(CommandHandler("produtos", produtos))
 
-    task_bot = asyncio.create_task(app.run_polling())
-    task_scheduler = asyncio.create_task(scheduler())
+    # Use `create_task` dentro do main
+    asyncio.create_task(scheduler())
+    await app.run_polling()
 
-    await asyncio.gather(task_bot, task_scheduler)
-
-   
 if __name__ == '__main__':
+    try:
         asyncio.run(main())
+    except RuntimeError:
+        logging.error("Erro ao executar o loop de eventos.")
