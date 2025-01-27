@@ -2,7 +2,7 @@ from telegram import Update, Bot
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 import schedule, os, asyncio, logging
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(messages)s',
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level = logging.INFO)
 
 TOKEN = os.getenv("TOKEN_INTELITECH")
@@ -10,8 +10,6 @@ CANAL_ID = "@intelitechofertas"
 
 if not TOKEN:
     raise ValueError("TOKEN não encontrado ou inválido.")
-
-app = ApplicationBuilder().token(TOKEN).build()
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Olá! Digite /promo para ver as melhores ofertas!")
@@ -32,23 +30,28 @@ async def produtos(update: Update, context: ContextTypes.DEFAULT_TYPE):
 """
     await update.message.reply_text(ofertas, parse_mode="Markdown")
 
-app.add_handler(CommandHandler("start", start))
-app.add_handler(CommandHandler("promo", promo))
-app.add_handler(CommandHandler("produtos", produtos))
-
-bot = Bot(token=TOKEN)
-
 async def enviar_promo():
+    bot = Bot(token=TOKEN)
     await bot.send_message(CANAL_ID, "🔥 Oferta do Dia: [Curso Python](https://www.hotmart.com/curso123) 🔥")
 
 async def scheduler():
+    schedule.every().day.at("12:00").do(lambda: asyncio.create_task(enviar_promo()))
     while True:
         schedule.run_pending()
         await asyncio.sleep(60)
 
 async def main():
-   await app.run_polling()
-   
+    app = ApplicationBuilder().token(TOKEN).build()
+
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("promo", promo))
+    app.add_handler(CommandHandler("produtos", produtos))
+
+    task_bot = asyncio.create_task(app.run_polling())
+    task_scheduler = asyncio.create_task(scheduler())
+
+    await asyncio.gather(task_bot, task_scheduler)
+
    
 if __name__ == '__main__':
     asyncio.run(main())
