@@ -10,6 +10,7 @@ CANAL_ID = "@intelitechofertas"
 
 if not TOKEN:
     raise ValueError("TOKEN não encontrado ou inválido.")
+    
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Olá! Digite /promo para ver as melhores ofertas!")
@@ -54,8 +55,4 @@ async def main():
 
    
 if __name__ == '__main__':
-    try:
-        asyncio.get_running_loop().run_until_complete(main())
-    except RuntimeError:
         asyncio.run(main())
-    
