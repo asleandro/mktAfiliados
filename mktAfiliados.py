@@ -43,13 +43,14 @@ async def scheduler():
         schedule.run_pending()
         await asyncio.sleep(60)
 
-schedule.every().day.at("12:00").do(lambda: asyncio.create_task(enviar_promo()))
-
 async def main():
-    await asyncio.gather(
-        app.run_polling(),
-        scheduler()
-    )
+    loop = asyncio.get_running_loop()
+    loop.create_task(scheduler())
+    await app.run_polling()
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except RuntimeError:
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(main())
