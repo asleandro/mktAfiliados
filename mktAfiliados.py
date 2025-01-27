@@ -47,19 +47,13 @@ async def main():
     app.add_handler(CommandHandler("promo", promo))
     app.add_handler(CommandHandler("produtos", produtos))
 
-    # Criar a tarefa do agendador antes do polling
-    scheduler_task = asyncio.create_task(scheduler())
+    asyncio.create_task(scheduler())
     await app.initialize()
 
     try:
         await app.run_polling()
     finally:
         await app.shutdown()
-        scheduler_task.cancel()
-        try:
-            await scheduler_task
-        except asyncio.CancelledError:
-            pass
 
 if __name__ == '__main__':
     try:
