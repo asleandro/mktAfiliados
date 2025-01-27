@@ -13,13 +13,13 @@ CANAL_ID = "@intelitechofertas"
 if not TOKEN:
     raise ValueError("TOKEN não encontrado ou inválido.")
 
-def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    update.message.reply_text("Olá! Digite /promo para ver as melhores ofertas!")
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Olá! Digite /promo para ver as melhores ofertas!")
 
 def main():
     app = ApplicationBuilder().token(TOKEN).build()
-
     app.add_handler(CommandHandler("start", start))
+    app.run_polling()
 
 if __name__ == '__main__':
     main()
