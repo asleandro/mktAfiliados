@@ -14,7 +14,10 @@ if not TOKEN:
     raise ValueError("TOKEN não encontrado ou inválido.")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Olá! Digite /promo para ver as melhores ofertas!")
+    if update.message:
+        await update.message.reply_text("Olá! Digite /promo para ver as melhores ofertas!")
+    else:
+        logger.warning("Nenhuma mensagem encontrada no update!")
 
 def main():
     app = ApplicationBuilder().token(TOKEN).build()
