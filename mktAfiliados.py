@@ -19,6 +19,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def main():
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
+
+    try:
+        app.stop()
+    except Exception as e:
+        print(f"Erro ao tentar parar a aplicação: {e}")
+
     app.run_polling()
 
 if __name__ == '__main__':
