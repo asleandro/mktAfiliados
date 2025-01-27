@@ -49,9 +49,11 @@ async def main():
     await app.run_polling()
 
 if __name__ == '__main__':
+    loop = asyncio.get_event_loop()
+    
     try:
-        loop = asyncio.get_running_loop()
-    except RuntimeError:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-    loop.run_until_complete(main())
+        loop.run_until_complete(main())
+        loop.run_forever()
+    except KeyboardInterrupt:
+        print("Bot interrompido")
+    
