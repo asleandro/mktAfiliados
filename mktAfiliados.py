@@ -47,8 +47,8 @@ async def main():
     app.add_handler(CommandHandler("promo", promo))
     app.add_handler(CommandHandler("produtos", produtos))
 
-    asyncio.create_task(scheduler())
     await app.initialize()
+    asyncio.create_task(scheduler())
 
     try:
         await app.run_polling()
@@ -56,7 +56,4 @@ async def main():
         await app.shutdown()
 
 if __name__ == '__main__':
-    try:
-        asyncio.run(main())
-    except RuntimeError:
-        logging.error("Erro ao executar o loop de eventos.")
+    asyncio.run(main())
