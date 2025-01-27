@@ -47,7 +47,8 @@ async def scheduler():
         await asyncio.sleep(60)
 
 async def main():
-   app.run_polling()
+   await app.run_polling()
+   await app.idle()
    
 if __name__ == '__main__':
     asyncio.run(main())
